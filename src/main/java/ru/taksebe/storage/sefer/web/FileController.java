@@ -36,10 +36,10 @@ public class FileController {
     }
 
     @Operation(summary = "Download file")
-    @GetMapping(value = "/download/{guid}")
+    @GetMapping(value = "/download/{uuid}")
     public void downloadFile(HttpServletResponse response,
-                             @PathVariable(name = "guid")
-                             @Parameter(description = "guid - имя файла", required = true)
+                             @PathVariable(name = "uuid")
+                             @Parameter(description = "uuid - имя файла", required = true)
                                      UUID fileName) {
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
@@ -55,9 +55,9 @@ public class FileController {
     }
 
     @Operation(summary = "Delete file")
-    @DeleteMapping(value = "/{guid}")
-    public ResponseEntity<Void> deleteFile(@PathVariable(name = "guid")
-                                           @Parameter(description = "guid - имя файла", required = true)
+    @DeleteMapping(value = "/{uuid}")
+    public ResponseEntity<Void> deleteFile(@PathVariable(name = "uuid")
+                                           @Parameter(description = "uuid - имя файла", required = true)
                                                    UUID fileName) {
         try {
             fileService.delete(fileName);

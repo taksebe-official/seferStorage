@@ -8,7 +8,7 @@ import java.util.UUID;
 @Schema(title = "FileInfoDto", description = "Информация о загруженном файле")
 public class FileInfoDto {
 
-    @Schema(title = "Имя файла при хранении (guid)", required = true)
+    @Schema(title = "Имя файла при хранении (uuid)", required = true)
     @JsonProperty
     private UUID fileName;
 
