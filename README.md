@@ -55,50 +55,50 @@ Sefer - "книга" на древнееврейском
 ## Пример использования
 
 ```java
-    public UUID upload(MultipartFile file) {
-        String serverUrl = URL + "/upload";
+public UUID upload(MultipartFile file) {
+    String serverUrl = URL + "/upload";
 
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+    HttpHeaders requestHeaders = new HttpHeaders();
+    requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
-        parameters.set("Content-Type","multipart/form-data");
-        parameters.add("file", file.getResource());
+    MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
+    parameters.set("Content-Type","multipart/form-data");
+    parameters.add("file", file.getResource());
 
-        final HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(
-                parameters, requestHeaders);
+    final HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(
+            parameters, requestHeaders);
 
-        ResponseEntity<FileInfoDto> response = restTemplate.exchange(
-                serverUrl,
-                HttpMethod.POST,
-                httpEntity,
-                FileInfoDto.class
-        );
+    ResponseEntity<FileInfoDto> response = restTemplate.exchange(
+            serverUrl,
+        HttpMethod.POST,
+        httpEntity,
+        FileInfoDto.class
+    );
 
-        if (response.getBody() == null) {
-            return null;
+    if (response.getBody() == null) {
+        return null;
+    }
+       return response.getBody().getFileName();
+}
+
+public void download(UUID seferFileName, OutputStream stream) {
+    String serverUrl = URL + "/download/" + seferFileName;
+
+    restTemplate.execute(
+            serverUrl,
+        HttpMethod.GET,
+        null,
+        clientHttpResponse -> {
+                StreamUtils.copy(clientHttpResponse.getBody(), stream);
+                return stream;
         }
-        return response.getBody().getFileName();
-    }
+    );
+}
 
-    public void download(UUID seferFileName, OutputStream stream) {
-        String serverUrl = URL + "/download/" + seferFileName;
-
-        restTemplate.execute(
-                serverUrl,
-                HttpMethod.GET,
-                null,
-                clientHttpResponse -> {
-                    StreamUtils.copy(clientHttpResponse.getBody(), stream);
-                    return stream;
-                }
-        );
-    }
-
-    public void delete(UUID seferFileName) {
-        String serverUrl = URL + "/" + seferFileName;
-        restTemplate.delete(serverUrl);
-    }
+public void delete(UUID seferFileName) {
+    String serverUrl = URL + "/" + seferFileName;
+    restTemplate.delete(serverUrl);
+}
 ```
 
 ## Лицензия
