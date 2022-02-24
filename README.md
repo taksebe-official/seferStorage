@@ -33,7 +33,7 @@ Sefer - "книга" на древнееврейском
 
 <u>HTTP Method</u>: GET
 
-<u>URL</u>: ```/api/files/download/{uuid}```
+<u>URL</u>: ```.../api/files/download/{uuid}```
 
 <u>Request:</u> UUID
 
@@ -43,7 +43,7 @@ Sefer - "книга" на древнееврейском
 
 <u>HTTP Method</u>: DELETE
 
-<u>URL</u>: ```/api/files/{uuid}```
+<u>URL</u>: ```.../api/files/{uuid}```
 
 <u>Request:</u> UUID
 
