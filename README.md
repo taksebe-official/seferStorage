@@ -1,26 +1,92 @@
-## Что это
-Sefer - "книга" на иврите
+## Sefer
+Простой модуль, используемый через API внешними приложениями для централизованного хранения файлов в заданной директории
 
-Это простой модуль, используемый через API внешними приложениями для централизованного хранения файлов в заданной директории
+Sefer - "книга" на древнееврейском
 
-Особенности:
+## Особенности:
 - файлы некоторых форматов, указанных в настройках, архивируются (.zip), остальных форматов - нет
 - файлы хранятся без расширения и оригинального имени. Эти параметры хранит внешнее приложение
 - при сохранении файлу в качестве имени присваивается UUID, служащий идентификатором файла для внешних приложений
 
-### Что нужно от внешнего приложения
-Для добавления файла в Sefer:
-- направить файл в нужный метод Sefer (POST, ```/api/files/upload```), записав в поле name объекта MultipartFile полное название файла, включающее его расширение (например, ```"Резюме Торвальдс.pdf"```)
-- получить в ответ идентификатор файла (UUID) 
-- сохранить у себя полное название файла, включающее его расширение, и полученный из Sefer идентификатор
+### API
 
-Для получения файла из Sefer и его дальнешего использования:
-- направить в нужный метод Sefer (GET, ```/api/files/download/{uuid}```) идентификатор файла (UUID)
-- получить stream
-- при необходимости использовать имя файла, сохранённое внешним приложением при добавлении файла
+**Загрузить файл:**
 
-Для удаления файла из Sefer:
-- направить в нужный метод Sefer (DELETE, ```/api/files/{uuid}```) идентификатор файла
+<u>HTTP Method</u>: POST
+
+<u>URL</u>: ```.../sefer/api/files/upload```
+
+<u>Request:</u> MultipartFile, не забывая записать в поле name объекта MultipartFile полное название файла, включающее его расширение (например, ```"Резюме Торвальдс.pdf"```)
+
+<u>Response</u>:
+```
+{
+"response": {
+    "FileInfoDto": {
+        fileName: <UUID>
+        }
+     }
+}
+```
+
+**Получить файл:**
+
+<u>HTTP Method</u>: GET
+
+<u>URL</u>: ```/api/files/download/{uuid}```
+
+<u>Request:</u> UUID
+
+<u>Response</u>: application/octet-stream
+
+**Удалить файл:**
+
+<u>HTTP Method</u>: DELETE
+
+<u>URL</u>: ```/api/files/{uuid}```
+
+<u>Request:</u> UUID
+
+<u>Response</u>: void
+
+## Пример использования
+```
+    public UUID upload(MultipartFile file) {
+        String serverUrl = URL + "/upload";
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
+        parameters.set("Content-Type","multipart/form-data");
+        parameters.add("file", file.getResource());
+
+        final HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(
+                parameters, requestHeaders);
+
+        ResponseEntity<FileInfoDto> response = restTemplate.exchange(serverUrl, HttpMethod.POST, httpEntity, FileInfoDto.class);
+
+        if (response.getBody() == null) {
+            return null;
+        }
+        return response.getBody().getFileName();
+    }
+
+    public void download(UUID seferFileName, OutputStream stream) {
+        String serverUrl = URL + "/download/" + seferFileName;
+
+        restTemplate.execute(serverUrl, HttpMethod.GET, null, clientHttpResponse -> {
+            StreamUtils.copy(clientHttpResponse.getBody(), stream);
+            return stream;
+        });
+    }
+
+    public void delete(UUID seferFileName) {
+        String serverUrl = URL + "/" + seferFileName;
+        restTemplate.delete(serverUrl);
+    }
+```
+
 
 ## Лицензия
 Этот проект лицензируется в соответствии с лицензией Apache 2.0
