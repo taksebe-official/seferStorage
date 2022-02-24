@@ -68,7 +68,12 @@ Sefer - "книга" на древнееврейском
         final HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(
                 parameters, requestHeaders);
 
-        ResponseEntity<FileInfoDto> response = restTemplate.exchange(serverUrl, HttpMethod.POST, httpEntity, FileInfoDto.class);
+        ResponseEntity<FileInfoDto> response = restTemplate.exchange(
+                serverUrl,
+                HttpMethod.POST,
+                httpEntity,
+                FileInfoDto.class
+        );
 
         if (response.getBody() == null) {
             return null;
@@ -79,10 +84,15 @@ Sefer - "книга" на древнееврейском
     public void download(UUID seferFileName, OutputStream stream) {
         String serverUrl = URL + "/download/" + seferFileName;
 
-        restTemplate.execute(serverUrl, HttpMethod.GET, null, clientHttpResponse -> {
-            StreamUtils.copy(clientHttpResponse.getBody(), stream);
-            return stream;
-        });
+        restTemplate.execute(
+                serverUrl,
+                HttpMethod.GET,
+                null,
+                clientHttpResponse -> {
+                    StreamUtils.copy(clientHttpResponse.getBody(), stream);
+                    return stream;
+                }
+        );
     }
 
     public void delete(UUID seferFileName) {
