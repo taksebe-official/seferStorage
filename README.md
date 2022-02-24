@@ -22,7 +22,7 @@ Sefer - "книга" на древнееврейском
 
 <ins>Response</ins>:
 
-```
+```json
 {
 "response": {
     "FileInfoDto": {
