@@ -65,14 +65,14 @@ public UUID upload(MultipartFile file) {
     parameters.set("Content-Type","multipart/form-data");
     parameters.add("file", file.getResource());
 
-    final HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(
-            parameters, requestHeaders);
+    final HttpEntity<MultiValueMap<String, Object>> httpEntity =
+            new HttpEntity<MultiValueMap<String, Object>>(parameters, requestHeaders);
 
     ResponseEntity<FileInfoDto> response = restTemplate.exchange(
             serverUrl,
-        HttpMethod.POST,
-        httpEntity,
-        FileInfoDto.class
+            HttpMethod.POST,
+            httpEntity,
+            FileInfoDto.class
     );
 
     if (response.getBody() == null) {
@@ -86,12 +86,12 @@ public void download(UUID seferFileName, OutputStream stream) {
 
     restTemplate.execute(
             serverUrl,
-        HttpMethod.GET,
-        null,
-        clientHttpResponse -> {
+            HttpMethod.GET,
+            null,
+            clientHttpResponse -> {
                 StreamUtils.copy(clientHttpResponse.getBody(), stream);
                 return stream;
-        }
+            }
     );
 }
 
