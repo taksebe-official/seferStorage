@@ -1,24 +1,27 @@
 ## Sefer
+
 Простой модуль, используемый через API внешними приложениями для централизованного хранения файлов в заданной директории
 
 Sefer - "книга" на древнееврейском
 
 ## Особенности:
-- файлы некоторых форматов, указанных в настройках, архивируются (.zip), остальных форматов - нет
-- файлы хранятся без расширения и оригинального имени. Эти параметры хранит внешнее приложение
-- при сохранении файлу в качестве имени присваивается UUID, служащий идентификатором файла для внешних приложений
+
+-   файлы некоторых форматов, указанных в настройках, архивируются (.zip), остальных форматов - нет
+-   файлы хранятся без расширения и оригинального имени. Эти параметры хранит внешнее приложение
+-   при сохранении файлу в качестве имени присваивается UUID, служащий идентификатором файла для внешних приложений
 
 ## API
 
 ### Загрузить файл:
 
-<u>HTTP Method</u>: POST
+<ins>HTTP Method</ins>: POST
 
-<u>URL</u>: ```.../sefer/api/files/upload```
+<ins>URL</ins>: `.../sefer/api/files/upload`
 
-<u>Request:</u> MultipartFile, не забывая записать в поле name объекта MultipartFile полное название файла, включающее его расширение (например, ```"Резюме Торвальдс.pdf"```)
+<ins>Request:</ins> MultipartFile, не забывая записать в поле name объекта MultipartFile полное название файла, включающее его расширение (например, `"Резюме Торвальдс.pdf"`)
 
-<u>Response</u>:
+<ins>Response</ins>:
+
 ```
 {
 "response": {
@@ -31,26 +34,27 @@ Sefer - "книга" на древнееврейском
 
 ### Получить файл:
 
-<u>HTTP Method</u>: GET
+<ins>HTTP Method</ins>: GET
 
-<u>URL</u>: ```.../api/files/download/{uuid}```
+<ins>URL</ins>: `.../api/files/download/{uuid}`
 
-<u>Request:</u> UUID
+<ins>Request:</ins> UUID
 
-<u>Response</u>: application/octet-stream
+<ins>Response</ins>: application/octet-stream
 
 ### Удалить файл:
 
-<u>HTTP Method</u>: DELETE
+<ins>HTTP Method</ins>: DELETE
 
-<u>URL</u>: ```.../api/files/{uuid}```
+<ins>URL</ins>: `.../api/files/{uuid}`
 
-<u>Request:</u> UUID
+<ins>Request:</ins> UUID
 
-<u>Response</u>: void
+<ins>Response</ins>: void
 
 ## Пример использования
-```
+
+```java
     public UUID upload(MultipartFile file) {
         String serverUrl = URL + "/upload";
 
@@ -87,8 +91,8 @@ Sefer - "книга" на древнееврейском
     }
 ```
 
-
 ## Лицензия
+
 Этот проект лицензируется в соответствии с лицензией Apache 2.0
 
 Подробности в файле LICENSE
@@ -116,6 +120,7 @@ GitHub - репозиторий
 Полный список зависимостей и используемые версии компонентов можно найти в pom.xml
 
 ## Сборка и запуск
+
 ```
 git clone https://github.com/taksebe-official/seferStorage
 mvn clean install
@@ -123,4 +128,5 @@ java -jar target/sefer.jar
 ```
 
 ## Отдельное спасибо
+
 [Владу](https://github.com/itotx), который продолжает возиться со мной, неразумным
