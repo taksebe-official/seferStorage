@@ -66,10 +66,14 @@ public class FileService {
 
     private String getFileName(MultipartFile file) {
         String fileName = file.getName();
-        if (!fileName.isBlank() && fileName.contains(".")) {
-            return fileName;
+        String originalFilename = file.getOriginalFilename();
+
+        if (fileName.isBlank() && (originalFilename == null || originalFilename.isBlank())) {
+            throw new IllegalArgumentException("Поля названий файла пусты. Заполните поле \"name\" именем файла, " +
+                    "включая расширение");
         }
-        return Objects.requireNonNullElse(file.getOriginalFilename(), "");
+
+        return fileName.isBlank() ? fileName : originalFilename;
     }
 
     private boolean isFileToZip(String fileName) {
